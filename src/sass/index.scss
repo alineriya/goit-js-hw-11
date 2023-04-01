@@ -1,2 +1,107 @@
 @import './common';
-@import './example';
+// @import './example';
+
+html {
+    box-sizing: border-box;
+}
+
+.header__container {
+    display: flex;
+    padding-top: 10;
+    padding-bottom: 10;
+    background: rgb(44, 44, 167);
+    justify-content: center;
+  }
+
+.search-form {
+    display: flex;
+}
+
+.search-input {
+    padding-left: 16px;
+    // margin-right: 12px;
+    width: 300px;
+    // min-width: 358px;
+    height: 30px;
+
+    line-height: 1.25;
+    letter-spacing: 0.03em;
+  
+    color: black;
+      
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-bottom-left-radius: 4px;
+    border-top-left-radius: 4px;
+}
+
+.search-btn {
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    background: #b5b1b1;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-bottom-right-radius: 4px;
+    border-top-right-radius: 4px;
+}
+
+.load-more {
+    font-size: 14px;
+    padding: 10px 20px;
+    background-color:rgb(44, 44, 167);
+    color: #ffffff;
+    border: none;
+    text-transform: uppercase;
+    cursor: pointer;
+    margin-left: 10px;
+    transition: background-color 250ms linear;
+    display: block;
+  margin: 20 auto;
+  }
+
+  .load-more:hover,
+.load-more:focus {
+  background-color: #6c6eb9;
+}
+
+.load-more.is-hidden {
+    display: none;
+  }
+
+.gallery {
+    // display:flex;
+    // width: 280px;
+    // gap: 10px;
+    // flex-wrap: wrap;
+    display: grid;
+//   max-width: 1140px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 280px));
+  grid-auto-rows: 280px;
+  grid-gap: 12px;
+  justify-content: center;
+  padding: 0;
+  list-style: none;
+//   margin-left: auto;
+//   margin-right: auto;
+}
+
+.photo-card {
+    width: 280px;
+    // border: 1px solid rgba(60, 31, 31, 0.3);
+    // transition: box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+  box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2),
+    0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 2px 1px -1px rgba(0, 0, 0, 0.12);
+}
+
+
+.info {
+    display: flex;
+    justify-content: space-around;
+    
+}
+
+.info-item {
+    display: flex;
+   flex-wrap: wrap;
+    justify-content:center;
+}
