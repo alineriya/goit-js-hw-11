@@ -1,7 +1,7 @@
 import { makeGalleryMarkup } from './js/image-card';
 import { PixabayAPI } from './js/pixabay-api';
 import { makeGalleryMarkup } from './js/image-card';
-import SimpleLightbox from "simplelightbox";
+import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
