@@ -17,12 +17,12 @@ loadMoreBtnEl.addEventListener('click', onLoadMoreBtnClick);
 async function onSearchFormSubmit(e) {
   e.preventDefault();
   resetMarkup();
-  
+  pixabayAPI.page === 1;
 
   const inputValue = e.currentTarget.elements['searchQuery'].value.trim();
   // console.log(inputValue);
   pixabayAPI.q = inputValue;
-  pixabayAPI.page === 1;
+  
 
 
   if (inputValue === '') {
@@ -61,6 +61,7 @@ async function onLoadMoreBtnClick() {
 
     if (pixabayAPI.page === numberOfPages) {
       loadMoreBtnEl.classList.add('is-hidden');
+      showInfoNotification();
     }
 
     galleryListEl.insertAdjacentHTML('beforeend', makeGalleryMarkup(data.hits));
@@ -86,6 +87,9 @@ function showSuccessNotification(hitsNumber) {
     );
   }
 
+function showInfoNotification() {
+    Notify.info(`We're sorry, but you've reached the end of search results.`);
+}
 
 let gallery = new SimpleLightbox('.gallery a');
 
