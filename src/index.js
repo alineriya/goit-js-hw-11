@@ -1,6 +1,9 @@
-import { makeGalleryMarkup } from "./js/image-card";
-import { PixabayAPI } from "./js/pixabay-api";
-import { makeGalleryMarkup } from "./js/image-card";
+import { makeGalleryMarkup } from './js/image-card';
+import { PixabayAPI } from './js/pixabay-api';
+import { makeGalleryMarkup } from './js/image-card';
+import SimpleLightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.min.css';
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
 const searchFormEl = document.querySelector('.js-search-form');
 const galleryListEl = document.querySelector('.js-gallery');
@@ -11,64 +14,89 @@ const pixabayAPI = new PixabayAPI();
 searchFormEl.addEventListener('submit', onSearchFormSubmit);
 loadMoreBtnEl.addEventListener('click', onLoadMoreBtnClick);
 
-// fetch(`https://pixabay.com/api/?key=34923774-d7ce091dd5f122f30c7093f5d&q="dog"`).then(response => 
-//     console.log(response.json()));
-
 function onSearchFormSubmit(e) {
-    e.preventDefault();
+  e.preventDefault();
+  resetMarkup();
+  
+
+  const inputValue = e.currentTarget.elements['searchQuery'].value.trim();
+  // console.log(inputValue);
+  pixabayAPI.q = inputValue;
+  pixabayAPI.page === 1;
+
+
+  if (inputValue === '') {
     resetMarkup();
+    
+    return;
+  }
 
-    const inputValue = e.currentTarget.elements['searchQuery'].value.trim();
-    console.log(inputValue);
-    pixabayAPI.q = inputValue;
+  pixabayAPI
+    .fetchPhotos()
+    .then(({data}) => {
+      console.log(data);
+      if (!data.hits.length) {
+        throw new Error();
+      }
 
-    pixabayAPI.fetchPhotos()
-        .then(data => {
-            console.log(data);
-            if (!data.hits.length) {
-                throw new Error();
-            }
-            // galleryListEl.insertAdjacentHTML('beforeend', makeGalleryMarkup(data.hits));
-            galleryListEl.innerHTML = makeGalleryMarkup(data.hits);
+      galleryListEl.innerHTML = makeGalleryMarkup(data.hits);
 
-            if (data.totalHits === pixabayAPI.page) {
-                return;
-            }
+      const numberOfPages = Math.ceil(data.totalHits / 40);
+      if (pixabayAPI.page < numberOfPages) {
+      loadMoreBtnEl.classList.remove('is-hidden');
+      showSuccessNotification(data.totalHits);
+    }
+    })
+    .catch(() => {
+      loadMoreBtnEl.classList.add('is-hidden');
+      showFailureNotification();
+    });
 
-            loadMoreBtnEl.classList.remove('is-hidden');
-        })
-        .catch(() => {
-            loadMoreBtnEl.classList.add('is-hidden');
-            galleryListEl.textContent = 'Images not found';
-        });
+  // try {
+  //     const {data} = pixabayAPI.fetchPhotos();
 
-    // try {
-    //     const {data} = pixabayAPI.fetchPhotos();
+  //     if (!data.results.length) {
+  //         console.log('Images not found');
+  //         return;
+  //     }
 
-    //     if (!data.results.length) {
-    //         console.log('Images not found');
-    //         return;
-    //     }
-
-    //     galleryListEl.innerHTML = makeGalleryMarkup(data.results);
-    //     loadMoreBtnEl.classList.remove('is-hidden');
-    // } catch (err) {
-    //     console.log(err);
-    // }
+  //     galleryListEl.innerHTML = makeGalleryMarkup(data.results);
+  //     loadMoreBtnEl.classList.remove('is-hidden');
+  // } catch (err) {
+  //     console.log(err);
+  // }
 }
 
 function onLoadMoreBtnClick() {
-    pixabayAPI.page += 1;
-    // const numberOfPages = Math.round(data.totalHits / data.hits);
-    pixabayAPI.fetchPhotos().then(data => {
-        if (pixabayAPI.page === Math.round(data.totalHits / data.hits)) {
-            loadMoreBtnEl.classList.add('is=hidden');
-        }
+  pixabayAPI.page += 1;
+  pixabayAPI.fetchPhotos().then(({data}) => {
+    const numberOfPages = Math.ceil(data.totalHits / 40);
 
-        galleryListEl.insertAdjacentHTML('beforeend', makeGalleryMarkup(data.hits));
-    });
+    if (pixabayAPI.page === numberOfPages) {
+      loadMoreBtnEl.classList.add('is-hidden');
+    }
+
+    galleryListEl.insertAdjacentHTML('beforeend', makeGalleryMarkup(data.hits));
+  });
 }
 
 function resetMarkup() {
-    galleryListEl.innerHTML = '';
+  galleryListEl.innerHTML = '';
+  loadMoreBtnEl.classList.add('is-hidden');
 }
+
+let gallery = new SimpleLightbox('.js-gallery a', {
+  captionsDelay: 250,
+});
+
+function showFailureNotification() {
+  Notify.failure(
+    'Sorry, there are no images matching your search query. Please try again.'
+  );
+};
+
+function showSuccessNotification(hitsNumber) {
+    Notify.success(
+      `Hooray! We found ${hitsNumber} images.`
+    );
+  }

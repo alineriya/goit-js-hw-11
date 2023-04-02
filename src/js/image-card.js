@@ -1,8 +1,10 @@
 export const makeGalleryMarkup = images =>
   images
     .map(
-      ({ webformatURL, tags, likes, views, comments, downloads }) =>
-        `<div class="photo-card">
+      ({ webformatURL, tags, likes, views, comments, downloads, largeImageURL }) =>
+        `<li>
+        <a href="${largeImageURL}">
+        <div class="photo-card">
     <img src="${webformatURL}" alt="${tags}" width=280 height=200 loading="lazy" />
     <div class="info">
       <p class="info-item">
@@ -19,6 +21,8 @@ export const makeGalleryMarkup = images =>
       </p>
     </div>
   </div>
+  </a>
+  </li>
     `
     )
     .join('');

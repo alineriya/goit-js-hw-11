@@ -15,23 +15,28 @@ export class PixabayAPI {
   q = null;
 
   fetchPhotos() {
-    const searchParams = new URLSearchParams({
-      ...this.#BASE_SEARCH_PARAMS,
+    
+    return axios.get(`${this.#BASE_URL}/api/`, {
+      params: {
+        ...this.#BASE_SEARCH_PARAMS,
       q: this.q,
       page: this.page,
-      
-    });
-
-    return fetch(
-      `${this.#BASE_URL}/api/?${searchParams}`
-    ).then(res => {
-      if (!res.ok) {
-        throw new Error(res.status);
       }
-      // console.log(res.json());
-      return res.json();
-    }
-    );
+    });
     
-  }
+    
+
+    // return fetch(
+    //   `${this.#BASE_URL}/api/?${searchParams}`
+    // ).then(res => {
+    //   if (!res.ok) {
+    //     throw new Error(res.status);
+    //   }
+    //   // console.log(res.json());
+    //   return res.json();
+    // }
+    // );
+    
+  };
+  // fetchPhotos().then(({data}) => console.log(data);
 }
