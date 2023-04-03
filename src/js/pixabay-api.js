@@ -3,13 +3,7 @@ import axios from 'axios';
 export class PixabayAPI {
   #BASE_URL = 'https://pixabay.com';
   #API_KEY = '34923774-d7ce091dd5f122f30c7093f5d';
-  #BASE_SEARCH_PARAMS = {
-    key: this.#API_KEY,
-    per_page: 40,
-    image_type: "photo",
-    orientation: "horizontal",
-    safesearch: "true",
-  };
+  
 
   page = 1;
   q = null;
@@ -18,9 +12,13 @@ export class PixabayAPI {
     
     return axios.get(`${this.#BASE_URL}/api/`, {
       params: {
-        ...this.#BASE_SEARCH_PARAMS,
-      q: this.q,
-      page: this.page,
+        per_page: 40,
+        image_type: "photo",
+        orientation: "horizontal",
+        safesearch: "true",
+        q: this.q,
+        page: this.page,
+        key: this.#API_KEY,
       }
     });
     
